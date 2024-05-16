@@ -84,14 +84,15 @@ def download_csv_file(data):
         mime='text/csv'
     )
 
-# from selenium import webdriver
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
-options = FirefoxOptions()
-options.add_argument("--headless")
-binary = FirefoxBinary("/tmp/bin/firefox/firefox")
-
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 link = 'https://www.youtube.com/'
@@ -101,7 +102,20 @@ st.title('Scrap and Analyse')
 # final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
 
 final_link = st.text_input('Enter Chennal link')
-driver=webdriver.Firefox(options=options,executable_path="/tmp/bin/geckodriver", firefox_binary=binary)
+URL = ""
+TIMEOUT = 20
+
+st.title("Test Selenium")
+
+firefoxOptions = Options()
+firefoxOptions.add_argument("--headless")
+service = Service(GeckoDriverManager().install())
+driver = webdriver.Firefox(
+    options=firefoxOptions,
+    service=service,
+)
+# driver.get(URL)
+
 
 # @st.experimental_singleton
 # def installff():
