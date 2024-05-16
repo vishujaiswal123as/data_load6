@@ -4,6 +4,7 @@ import numpy as np
 # import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import selenium 
 import time as ttt
 from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
