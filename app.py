@@ -7,10 +7,10 @@ from selenium import webdriver
 import time as ttt
 from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 # import os
 from selenium import webdriver
-from selenium.webdriver import FirefoxOptions
+# from selenium.webdriver import FirefoxOptions
 # import sys
 # scroll all data and after run this
 
@@ -86,13 +86,13 @@ def download_csv_file(data):
 
 
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
+# from selenium.common.exceptions import TimeoutException
+# from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
+# from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager
+# from selenium.webdriver.support.ui import WebDriverWait
+# from webdriver_manager.firefox import GeckoDriverManager
 
 
 link = 'https://www.youtube.com/'
@@ -107,13 +107,21 @@ TIMEOUT = 20
 
 st.title("Test Selenium")
 
-firefoxOptions = Options()
-firefoxOptions.add_argument("--headless")
-service = Service(GeckoDriverManager().install())
-driver = webdriver.Firefox(
-    options=firefoxOptions,
-    service=service,
-)
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
+options = Options()
+options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+driver = webdriver.Firefox(options=options,keep_alive='C:\\WebDrivers\\geckodriver.exe')
+
+
+# firefoxOptions = Options()
+# firefoxOptions.add_argument("--headless")
+# service = Service(GeckoDriverManager().install())
+# driver = webdriver.Firefox(
+#     options=firefoxOptions,
+#     service=service,
+# )
 # driver.get(URL)
 
 
