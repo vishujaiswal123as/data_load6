@@ -1,17 +1,10 @@
 import time
-import pprint
-import csv
-import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import csv
-# from youtube_comment_scraper_python import *
-import pandas as pd
-import plotly.express as px
 import re
 import streamlit as st
 
