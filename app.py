@@ -1,12 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+# import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time as ttt
 from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+# import os
 from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
+# import sys
+# scroll all data and after run this
 
 # all functions
 def scroller():
@@ -80,9 +86,18 @@ def download_csv_file(data):
 
 
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager
+
 
 link = 'https://www.youtube.com/'
+# name='gfg'
+# final_link=link+name
 st.title('Scrap and Analyse')
 # final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
 
@@ -98,12 +113,38 @@ from selenium.webdriver.firefox.options import Options
 options = Options()
 options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 driver = webdriver.Firefox(options=options,keep_alive='C:\\WebDrivers\\geckodriver.exe')
+# driver.get('http://google.com/')
+
+
+# firefoxOptions = Options()
+# firefoxOptions.add_argument("--headless")
+# service = Service(GeckoDriverManager().install())
+# driver = webdriver.Firefox(
+#     options=firefoxOptions,
+#     service=service,
+# )
+# driver.get(URL)
+
+
+# @st.experimental_singleton
+# def installff():
+#   os.system('sbase install geckodriver')
+#   os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+
+# _ = installff()
+
+# opts = FirefoxOptions()
+# opts.add_argument("--headless")
+# driver = webdriver.Firefox(options=opts)
+
+# driver.get(final_link)
+# st.write(driver.page_source)
+
 
 # ttt.sleep(20)
 if final_link:
     but1 = st.button('Scrap Dataset')
     if but1:
-        st.write('Please wait a second')
         driver.get(final_link)
         ttt.sleep(3)
         scrol = scroller()
