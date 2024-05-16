@@ -89,7 +89,7 @@ link = 'https://www.youtube.com/'
 st.title('Scrap and Analyse')
 #final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
 final_link = st.text_input('Enter Chennal link')
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver = webdriver.Chrome(service=Service(ChromeDriverManager()))
 if final_link:
     but1 = st.button('Scrap Dataset')
     if but1:
