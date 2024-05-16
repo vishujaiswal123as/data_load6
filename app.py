@@ -56,9 +56,9 @@ def data_scrape(soups):
         data1.append([title, views, time, thumbnail, video_link])
 
     # print(data)
-    data2 = pd.DataFrame(
-        data1, columns=['title', 'views', 'time', 'thumbnail', 'video_link'])
-    data2.to_csv('Youtube_gfg.csv', index=False)
+    # data2 = pd.DataFrame(
+    #     data1, columns=['title', 'views', 'time', 'thumbnail', 'video_link'])
+    # data2.to_csv('Youtube_gfg.csv', index=False)
     return data1
 
 def download_csv_file(data):
