@@ -8,15 +8,13 @@ import time as ttt
 from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-import os
+# import os
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
-import sys
+# import sys
 # scroll all data and after run this
 
 # all functions
-
-
 def scroller():
     for i in tqdm(range(0, 500, 1000)):
         driver.execute_script("window.scrollTo(0, " + str(i) + ")")
@@ -86,6 +84,16 @@ def download_csv_file(data):
         mime='text/csv'
     )
 
+# from selenium import webdriver
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
+options = FirefoxOptions()
+options.add_argument("--headless")
+binary = FirefoxBinary("/tmp/bin/firefox/firefox")
+
+
+
 link = 'https://www.youtube.com/'
 # name='gfg'
 # final_link=link+name
@@ -93,19 +101,22 @@ st.title('Scrap and Analyse')
 # final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
 
 final_link = st.text_input('Enter Chennal link')
-@st.experimental_singleton
-def installff():
-  os.system('sbase install geckodriver')
-  os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+driver=webdriver.Firefox(options=options,executable_path="/tmp/bin/geckodriver", firefox_binary=binary)
 
-_ = installff()
+# @st.experimental_singleton
+# def installff():
+#   os.system('sbase install geckodriver')
+#   os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
 
-opts = FirefoxOptions()
-opts.add_argument("--headless")
-driver = webdriver.Firefox(options=opts)
+# _ = installff()
+
+# opts = FirefoxOptions()
+# opts.add_argument("--headless")
+# driver = webdriver.Firefox(options=opts)
 
 # driver.get(final_link)
 # st.write(driver.page_source)
+
 
 # ttt.sleep(20)
 if final_link:
