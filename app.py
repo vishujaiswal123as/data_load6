@@ -1,65 +1,105 @@
-import time
+import streamlit as st
+import pandas as pd
+import numpy as np
+# import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
+import time as ttt
+from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-import re
-import streamlit as st
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+# scroll all data and after run this
 
-url = st.text_input('Paste the Youtube Channel Link',"")
-if not url:
-  st.warning('Please input a Link.')
-  st.stop()
-st.success('Thank you for inputting a link.')
-name = re.compile(r"[A-Z]\w+")
-inp = name.findall(url)
-out = inp[0]
-st.write('Getting Data from', out, 'channel')
+# all functions
 
-driver.get(url)
-url = input('Enter Youtube Video Url- ')
-driver.get(url)
-# # "https://www.youtube.com/@YasoobKhalid/videos"
-# channel_title = driver.find_element(By.XPATH, '//yt-formatted-string[contains(@class, "ytd-channel-name")]').text
-handle = driver.find_element(By.XPATH, '//yt-formatted-string[@id="channel-handle"]').text
-subscriber_count = driver.find_element(By.XPATH, '//yt-formatted-string[@id="subscriber-count"]').text
-WAIT_IN_SECONDS = 5
-last_height = driver.execute_script("return document.documentElement.scrollHeight")
 
-while True:
-    # Scroll to the bottom of page
-    driver.execute_script("window.scrollTo(0, arguments[0]);", last_height)
-    # Wait for new videos to show up
-    time.sleep(WAIT_IN_SECONDS)
+def scroller():
+    for i in tqdm(range(0, 500, 1000)):
+        driver.execute_script("window.scrollTo(0, " + str(i) + ")")
+        driver.execute_script("(0,"+str(i)+")")
+        ttt.sleep(.1)
+    return 'end'
+
+def data_scrape(soups):
+    soup = soups.find_all('ytd-rich-item-renderer')
+    data1 = []
+    for sp in soup:
+        try:
+            title = sp.find(
+                'a', class_="yt-simple-endpoint focus-on-expand style-scope ytd-rich-grid-media").text
+
+        except:
+            title = ''
+        try:
+            video_link = sp.find(
+                'a', class_="yt-simple-endpoint focus-on-expand style-scope ytd-rich-grid-media").get('href')
+
+        except:
+            video_link = ''
+        try:
+            views = sp.find_all(
+                'span', "inline-metadata-item style-scope ytd-video-meta-block")[0].text.strip(' views')
+        except:
+            views = ''
+
+        try:
+            time = sp.find_all(
+                'span', "inline-metadata-item style-scope ytd-video-meta-block")[1].text
+
+        except:
+            time = np.nan
+        try:
+            thumbnail = sp.find('img').get('src').split('?')[0]
+        except:
+            thumbnail = ''
+        data1.append([title, views, time, thumbnail, video_link])
+
+    # print(data)
+    # data2 = pd.DataFrame(
+    #     data1, columns=['title', 'views', 'time', 'thumbnail', 'video_link'])
+    # data2.to_csv('Youtube_gfg.csv', index=False)
+    return data1
+
+def download_csv_file(data):
+    ## takes data and make csv
+    df = pd.DataFrame(data)
     
-    # Calculate new document height and compare it with last height
-    new_height = driver.execute_script("return document.documentElement.scrollHeight")
-    if new_height == last_height:
-        break
-    last_height = new_height
+    @st.cache
+    def convert_to_csv(df):
+        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv(index=False).encode('utf-8')
+    
+    csv = convert_to_csv(df)
+    
+    # display the dataframe on streamlit app
+    st.write(df)
+    
+    # download button 1 to download dataframe as csv
+    download1 = st.download_button(
+        label="Download data as CSV",
+        data=csv,
+        file_name='large_df.csv',
+        mime='text/csv'
+    )
 
-
-thumbnails = driver.find_elements(By.XPATH, '//a[@id="thumbnail"]/yt-image/img')
-views = driver.find_elements(By.XPATH,'//div[@id="metadata-line"]/span[1]')
-titles = driver.find_elements(By.ID, "video-title")
-links = driver.find_elements(By.ID, "video-title-link")
-# likes = driver.find_elements(By.ID, "video-title-link-likes")
-
-
-videos = []
-for title, view, thumb, link in zip(titles, views, thumbnails, links):
-    video_dict = {
-        'title': title.text,
-        'views': view.text,
-        # 'likes': likes.text,
-        'thumbnail': thumb.get_attribute('src'),
-        'link': link.get_attribute('href')
-    }
-    videos.append(video_dict)
-
-print(videos)
-
+link = 'https://www.youtube.com/'
+# name='gfg'
+# final_link=link+name
+st.title('Scrap and Analyse')
+# final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
+final_link = st.text_input('Enter Chennal link')
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))  #initialise server
+ttt.sleep(20)
+if final_link:
+    but1 = st.button('Scrap Dataset')
+    if but1:
+        driver.get(final_link)
+        ttt.sleep(3)
+        scrol = scroller()
+        if scrol == 'end':
+            st.title('Almost Done')
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            data_for_download=data_scrape(soup)
+            # download='D:\web_scraping\Youtube_gfg.csv'
+            download_csv_file(data_for_download)
