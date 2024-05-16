@@ -8,7 +8,10 @@ import time as ttt
 from tqdm import tqdm
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+import os
+from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
+import sys
 # scroll all data and after run this
 
 # all functions
@@ -88,9 +91,23 @@ link = 'https://www.youtube.com/'
 # final_link=link+name
 st.title('Scrap and Analyse')
 # final_link = 'https://www.youtube.com/@ashishchanchlanivines/videos'
+
 final_link = st.text_input('Enter Chennal link')
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))  #initialise server
-ttt.sleep(20)
+@st.experimental_singleton
+def installff():
+  os.system('sbase install geckodriver')
+  os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+
+_ = installff()
+
+opts = FirefoxOptions()
+opts.add_argument("--headless")
+driver = webdriver.Firefox(options=opts)
+
+# driver.get(final_link)
+# st.write(driver.page_source)
+
+# ttt.sleep(20)
 if final_link:
     but1 = st.button('Scrap Dataset')
     if but1:
